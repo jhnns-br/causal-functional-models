@@ -12,7 +12,7 @@ import copy
 
 def train_graph(modeled_graph, max_epochs, criterion):
     """
-    Train the models of the graph node using the 
+    Train the models of the graph's nodes using the 
     provided dataloaders and optimizers. 
     """
     trained_graph = copy.deepcopy(modeled_graph)
