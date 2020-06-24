@@ -52,13 +52,13 @@ def train_graph(modeled_graph, max_epochs, criterion):
 
 def inference(trained_graph, df_inputs, df_labels=None, metric=['MAE']):
     """
-        Function uses input values provided in df_inputs.
-        If df_inputs containes values for node_x
-        the values in df_inputs will be used as inputs for 
-        subsequent node_x+1, not the predictions of node_x. 
+    Function uses input values provided in df_inputs.
+    If df_inputs containes values for node_x
+    the values in df_inputs will be used as inputs for 
+    subsequent node_x+1, not the predictions of node_x. 
 
-        TBD: graph must be strucutred sequentially when created 
-            --> implent so some sort of sorting algo
+    TBD: graph must be strucutred sequentially when created 
+         --> implent so some sort of sorting algo
     """
     
     df_pred = pd.DataFrame()
