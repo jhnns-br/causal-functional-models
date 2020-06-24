@@ -1,5 +1,5 @@
 # causal-functional-models
-[personal side project] combining causal graphical models with neural networks
+[side project] combining neural networks with causal structures to increase robustness. 
 
 Dependencies:
 - numpy 1.18.1
