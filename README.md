@@ -1,2 +1,2 @@
 # causal-functional-models
-combining causal graphical models with neural networks
+[personal side project] combining causal graphical models with neural networks
