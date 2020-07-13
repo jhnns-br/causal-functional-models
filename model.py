@@ -10,6 +10,7 @@ import torch as torch
 from torch import nn
 import copy
 
+torch.manual_seed(123)
 
 class CFMDataset(Dataset):
     """
@@ -34,15 +35,11 @@ class CFMDataset(Dataset):
 
         return features, label
 
-def get_dataloader(df, feature_cols=['x11', 'x12', 'x13'],
-                    label_cols=['d31', 'l21'], batch_size=1):
+def get_dataloader(data, feature_cols, label_cols, batch_size=1):
     """ 
     Returns pytorch dataloader from given dataframe
-        
-    TBD: add support for incomplete datasets and 
-    drop rows with missing values in specified 
-    feature and label columns 
     """
+    df = data.dropna(axis=0, how='any')
     dataset = CFMDataset(features=df[feature_cols].to_numpy(), 
                         labels=df[label_cols].to_numpy())
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, sampler=None,
@@ -61,7 +58,7 @@ def func_block(dim_in, depth, activation=None):
         if activation is not None:
             block.add_module('activation_' + str(i), activation)
     block.add_module('fc_' + str(i+1), nn.Linear(dim_in, 1))  
-    return block.double().apply(xavier_init)
+    return block.double()
 
 def xavier_init(m):  
     """
@@ -72,7 +69,7 @@ def xavier_init(m):
         if m.bias is not None:
             nn.init.zeros_(m.bias.data)
 
-def model_graph(graph, data, val_split, batch_size, depth, activation=None, optimizer='Adam'):
+def model_graph(graph, data, val_split, batch_size, depth, activation=None, optimizer='SGD'):
     """
     Extends the graph by adding models, dataloaders, 
     and optimizers to nodes with inputs and returns it.
@@ -91,6 +88,8 @@ def model_graph(graph, data, val_split, batch_size, depth, activation=None, opti
             node['model'] = func_block(len(node['inputs']), depth, activation)
             if optimizer == 'Adam':
                 node['optimizer'] = torch.optim.Adam(node['model'].parameters())
+            elif optimizer == 'SGD':
+                node['optimizer'] = torch.optim.SGD(node['model'].parameters(), momentum=0.9, lr=0.001, weight_decay=0.00005)
             else: 
                 print('Error: Choosen optimizer not implemented -> Default Adam is used')
                 node['optimizer'] = torch.optim.Adam(node['model'].parameters())
