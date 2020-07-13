@@ -1,5 +1,7 @@
 # causal-functional-models
-[side project] combining neural networks with causal structures to increase robustness. 
+[side project]  
+Combining neural networks with causal structures to increase robustness. 
+See *CFM_Overview.ipynb* for a short introduction.
 
 Dependencies:
 - numpy 1.18.1
